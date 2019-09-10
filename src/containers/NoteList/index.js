@@ -1,15 +1,19 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
+import Types from 'prop-types';
 import styled from 'styled-components';
 
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import AppBar from './AppBar';
+import Empty from './Empty';
 import LoadingDisplay from '../../components/LoadingDisplay';
 import ErrorDisplay from '../../components/ErrorDisplay';
+import NoteList from './NoteList';
 
 import { STATUS } from '../../constants';
-import store from '../../store';
+import snackbar from '../../utils/snackbar';
 import logger from '../../utils/logger';
 
 const Style = styled.div`
@@ -20,6 +24,7 @@ const Style = styled.div`
   top: 0;
   display: flex;
   flex-direction: column;
+  z-index: 1;
 `;
 const displayStyle = {
   flex: 1,
@@ -27,49 +32,82 @@ const displayStyle = {
 };
 const fabStyle = {
   position: 'absolute',
-  bottom: 50,
-  right: 50,
+  bottom: 80,
+  right: 30,
 };
 
-const NoteList = () => {
-  const [status, setStatus] = useState(STATUS.LOADING);
-  const [noteList, setNoteList] = useState([]);
-  const getNoteList = useCallback(() => {
-    setStatus(STATUS.LOADING);
-    store
-      .getNoteList()
-      .then((nl) => {
-        setNoteList(nl);
-        setStatus(STATUS.SUCCESS);
-      })
-      .catch((error) => {
-        logger.error(error, '获取笔记列表失败', { dialog: true });
-        setStatus(STATUS.FAILED);
-      });
-  }, []);
+const Wrapper = ({
+  status,
+  reload,
+  noteList,
+  createNote,
+  openEditor,
+  openPreview,
+  onDelete,
+  onImport,
+}) => {
+  const [creating, setCreating] = useState(false);
 
-  useEffect(() => {
-    getNoteList();
-  }, [getNoteList]);
-
-  console.log(noteList);
+  const onEditNode = useCallback((note) => openEditor(note), [openEditor]);
+  const onPreview = useCallback((note) => openPreview(note), [openPreview]);
+  const onCreateNode = useCallback(() => {
+    if (creating) {
+      return snackbar.error('正在创建新的笔记...');
+    }
+    setCreating(true);
+    createNote()
+      .then(openEditor)
+      .catch((error) =>
+        logger.error(error, '创建新的笔记失败', { dialog: true }),
+      )
+      .finally(() => setCreating(false));
+  }, [createNote, creating, openEditor]);
 
   return (
     <Style>
-      <AppBar />
+      <AppBar onImport={onImport} />
       {status === STATUS.SUCCESS ? (
-        <>
-          <Fab color="primary" aria-label="add" style={fabStyle}>
-            <AddIcon />
-          </Fab>
-        </>
+        noteList.length ? (
+          <>
+            <NoteList
+              noteList={noteList}
+              onEdit={onEditNode}
+              onPreview={onPreview}
+              onDelete={onDelete}
+            />
+            <Fab
+              color="primary"
+              aria-label="add"
+              style={fabStyle}
+              onClick={onCreateNode}
+            >
+              {creating ? (
+                <CircularProgress color="secondary" size={24} />
+              ) : (
+                <AddIcon />
+              )}
+            </Fab>
+          </>
+        ) : (
+          <Empty onCreateNote={onCreateNode} />
+        )
       ) : status === STATUS.LOADING ? (
         <LoadingDisplay style={displayStyle} />
       ) : (
-        <ErrorDisplay reload={getNoteList} style={displayStyle} />
+        <ErrorDisplay reload={reload} style={displayStyle} />
       )}
     </Style>
   );
 };
+Wrapper.propTypes = {
+  status: Types.oneOf(Object.values(STATUS)).isRequired,
+  noteList: Types.arrayOf(Types.object).isRequired,
+  reload: Types.func.isRequired,
+  openEditor: Types.func.isRequired,
+  createNote: Types.func.isRequired,
+  openPreview: Types.func.isRequired,
+  onDelete: Types.func.isRequired,
+  onImport: Types.func.isRequired,
+};
 
-export default NoteList;
+export default Wrapper;

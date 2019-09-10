@@ -26,7 +26,7 @@ const Wrapper = ({ onExited, duration, message, type }) => {
     <Snackbar
       anchorOrigin={{
         vertical: 'bottom',
-        horizontal: 'right',
+        horizontal: 'center',
       }}
       open={open}
       autoHideDuration={duration}

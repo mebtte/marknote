@@ -29,7 +29,7 @@ const chars = [
 ];
 
 function getRandomString(length = 10, withNumber = false) {
-  const allChars = chars;
+  let allChars = chars;
   if (withNumber) {
     allChars = allChars.concat(numbers);
   }
