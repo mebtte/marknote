@@ -18,10 +18,50 @@
         padding: 0;
         box-sizing: border-box;
       }
+      .init {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .init > img {
+        width: 96px;
+      }
+      @keyframes progress {
+        0% {
+          background-color: rgb(25, 118, 210);
+        }
+        50% {
+          background-color: rgb(220, 0, 78);
+        }
+        100% {
+          background-color: rgb(25, 118, 210);
+        }
+      }
+      .init > .progress {
+        margin: 30px 0 5px 0;
+        width: 128px;
+        height: 5px;
+        overflow: hidden;
+        animation: progress 2s infinite;
+      }
+      .init > .message {
+        font-size: 12px;
+        color: #555;
+      }
     </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div class="init">
+        <img src="%PUBLIC_URL%/logo.png" alt="logo" />
+        <div class="progress"></div>
+        <div class="message">正在加载资源...</div>
+      </div>
+    </div>
   </body>
 </html>
