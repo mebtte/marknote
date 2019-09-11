@@ -9,7 +9,7 @@ import { STATUS } from './constants';
 import store from './store';
 import logger from './utils/logger';
 import dialog from './utils/dialog';
-import importNote from './utils/importNote';
+import importNotes from './utils/importNotes';
 import snackbar from './utils/snackbar';
 
 const Style = styled.div`
@@ -96,9 +96,9 @@ const App = () => {
   );
   const onImport = useCallback(
     () =>
-      importNote((n) => {
-        setNoteList((nl) => [n, ...nl]);
-        return snackbar.info('导入成功');
+      importNotes((newNoteList) => {
+        setNoteList((nl) => [...newNoteList, ...nl]);
+        return snackbar.info(`成功导入${newNoteList.length}篇笔记`);
       }),
     [],
   );

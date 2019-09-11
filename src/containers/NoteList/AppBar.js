@@ -11,6 +11,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+
+import exportAllNotes from '../../utils/exportAllNotes';
 
 const titleStyle = {
   flex: 1,
@@ -26,6 +29,10 @@ const Wrapper = ({ onImport }) => {
     setAnchor(null);
     return onImport();
   }, [onImport]);
+  const onExportAll = useCallback(() => {
+    setAnchor(null);
+    return exportAllNotes();
+  }, []);
 
   return (
     <AppBar position="static">
@@ -51,6 +58,12 @@ const Wrapper = ({ onImport }) => {
             <CloudUploadIcon />
           </ListItemIcon>
           <Typography variant="inherit">导入笔记</Typography>
+        </MenuItem>
+        <MenuItem onClick={onExportAll}>
+          <ListItemIcon>
+            <CloudDownloadIcon />
+          </ListItemIcon>
+          <Typography variant="inherit">导出全部笔记</Typography>
         </MenuItem>
       </Menu>
     </AppBar>
