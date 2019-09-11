@@ -47,6 +47,7 @@ const Wrapper = ({
   onImport,
 }) => {
   const [creating, setCreating] = useState(false);
+  const [keyword, setKeyword] = useState('');
 
   const onEditNode = useCallback((note) => openEditor(note), [openEditor]);
   const onPreview = useCallback((note) => openPreview(note), [openPreview]);
@@ -62,15 +63,24 @@ const Wrapper = ({
       )
       .finally(() => setCreating(false));
   }, [createNote, creating, openEditor]);
+  const onKeywordChange = useCallback(
+    (event) => setKeyword(event.target.value),
+    [],
+  );
 
+  const lowerCaseKeyword = keyword.toLowerCase();
   return (
     <Style>
-      <AppBar onImport={onImport} />
+      <AppBar onImport={onImport} onKeywordChange={onKeywordChange} />
       {status === STATUS.SUCCESS ? (
         noteList.length ? (
           <>
             <NoteList
-              noteList={noteList}
+              noteList={noteList.filter(
+                (n) =>
+                  n.title.toLowerCase().includes(lowerCaseKeyword) ||
+                  n.content.toLowerCase().includes(lowerCaseKeyword),
+              )}
               onEdit={onEditNode}
               onPreview={onPreview}
               onDelete={onDelete}

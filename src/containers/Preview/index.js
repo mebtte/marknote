@@ -24,7 +24,7 @@ const Style = styled.div`
 const Preview = ({ open, note, onClose, openEditor, onDelete }) => {
   const onEdit = useCallback(() => openEditor(note), [note, openEditor]);
   const onExport = useCallback(() => exportNote(note), [note]);
-  const onDeleteNote = useCallback(() => onDelete(note), [note]);
+  const onDeleteNote = useCallback(() => onDelete(note), [note, onDelete]);
 
   return (
     <Style open={open}>
