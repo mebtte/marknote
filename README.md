@@ -1,6 +1,7 @@
 # Marknote
 
-一个轻量笔记应用
+一个轻量 PWA 笔记应用。  
+![](./docs/play.gif)
 
 ## 功能
 
