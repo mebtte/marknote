@@ -47,7 +47,7 @@ const Editor = ({ open, onClose, note, onDelete, updateNote, openPreview }) => {
   const onPreview = useCallback(() => {
     // 没有编辑不需要更新
     if (note.title === title && note.content === content) {
-      return onPreview(note);
+      return openPreview(note);
     }
     setSaving(true);
     updateNote(note.id, { title, content })

@@ -3,6 +3,7 @@ import Types from 'prop-types';
 import styled from 'styled-components';
 
 import AppBar from './AppBar';
+import Content from './Content';
 
 import exportNote from '../../utils/exportNote';
 
@@ -23,14 +24,16 @@ const Style = styled.div`
 const Preview = ({ open, note, onClose, openEditor, onDelete }) => {
   const onEdit = useCallback(() => openEditor(note), [note, openEditor]);
   const onExport = useCallback(() => exportNote(note), [note]);
+  const onDeleteNote = useCallback(() => onDelete(note), [note]);
 
   return (
     <Style open={open}>
+      <Content note={note} />
       <AppBar
         onExport={onExport}
         onBack={onClose}
         onEdit={onEdit}
-        onDelete={onDelete}
+        onDelete={onDeleteNote}
       />
     </Style>
   );

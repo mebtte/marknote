@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
 import formatDate from '../../utils/formatDate';
+import { DEFAULT_TITLE } from '../../constants';
 
 const Style = styled.div`
   height: 70px;
@@ -35,7 +36,7 @@ const Style = styled.div`
 const Note = ({ note, onPreview, onOpenMenu }) => (
   <Style>
     <div className="info" onClick={() => onPreview(note)}>
-      <div className="title">{note.title || '未设置标题'}</div>
+      <div className="title">{note.title || DEFAULT_TITLE}</div>
       <div className="time">{formatDate(note.updateTime)}</div>
     </div>
     <IconButton onClick={(event) => onOpenMenu(event, note)}>
