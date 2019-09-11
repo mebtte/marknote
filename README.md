@@ -31,12 +31,12 @@ npm run build
 |- public 静态资源
 |- src 源码
   |- components 通用组件
-  |- constants 常量
   |- containers 容器
     |- Editor 编辑器
     |- NoteList 笔记列表
     |- Preview 笔记预览
   |- utils 工具函数
+  |- constants.js 常量
   |- store.js 本地存储相关
 ```
 
