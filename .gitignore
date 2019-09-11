@@ -8,3 +8,6 @@ yarn.lock
 
 # log
 *.log
+
+# build
+build/
